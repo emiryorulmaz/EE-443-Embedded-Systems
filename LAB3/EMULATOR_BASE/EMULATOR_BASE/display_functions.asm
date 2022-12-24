@@ -1,0 +1,326 @@
+;*********************************************************
+;*********************************************************
+;R5=FIRST DIGIT R6=SECOND DIGIT R7=THIRD DIGIT
+;*********************************************************
+;*********************************************************
+DISPLAY:
+		MOV		R5,R5
+		RCALL	DELAY
+		CBI		PORTD,PORTD3 ;	DISABLE CATHODE-1
+		CBI		PORTD,PORTD1 ;	DISABLE CATHODE-2
+		CBI		PORTD,PORTD0 ;	DISABLE CATHODE-3
+		RCALL	DIGIT
+		SBI		PORTD,PORTD3 ;	ENABLE CATHODE-1
+
+		MOV		R5,R6
+		RCALL	DELAY
+		CBI		PORTD,PORTD3 ;	DISABLE CATHODE-1
+		CBI		PORTD,PORTD1 ;	DISABLE CATHODE-2
+		CBI		PORTD,PORTD0 ;	DISABLE CATHODE-3
+		RCALL	DIGIT
+		SBI		PORTD,PORTD1 ;	ENABLE CATHODE-2
+
+		MOV		R5,R7
+		RCALL	DELAY
+		CBI		PORTD,PORTD3 ;	DISABLE CATHODE-1
+		CBI		PORTD,PORTD1 ;	DISABLE CATHODE-2
+		CBI		PORTD,PORTD0 ;	DISABLE CATHODE-3
+		RCALL	DIGIT
+		SBI		PORTD,PORTD0 ;	ENABLE CATHODE-3
+		RET
+;*********************************************************
+
+DIGIT:
+		CBI PORTB,PORTB0	;RESET PORTB0
+		LDI	R16,0xF8
+		OUT	PORTC,R16		;RESET PORTC0-PORTC1-PORTC2
+		LDI	R16,0x04
+		OUT	PORTD,R16		;RESET PORTD0-PORTD1-PORTD3-PORTD4-PORTD5-PORTD6-PORTD7
+
+		LDI		R16,0
+		SUB		R16,R5
+		BREQ	DIGIT_ZERO
+		LDI		R16,1
+		SUB		R16,R5
+		BREQ	DIGIT_ONE
+		LDI		R16,2
+		SUB		R16,R5
+		BREQ	DIGIT_TWO
+		LDI		R16,3
+		SUB		R16,R5
+		BREQ	DIGIT_THREE
+		LDI		R16,4
+		SUB		R16,R5
+		BREQ	DIGIT_FOUR
+		LDI		R16,5
+		SUB		R16,R5
+		BREQ	DIGIT_FIVE
+		LDI		R16,6
+		SUB		R16,R5
+		BREQ	DIGIT_SIX
+		LDI		R16,7
+		SUB		R16,R5
+		BREQ	DIGIT_SEVEN
+		LDI		R16,8
+		SUB		R16,R5
+		BREQ	DIGIT_EIGHT
+		LDI		R16,9
+		SUB		R16,R5
+		BREQ	DIGIT_NINE
+	DIGIT_ZERO:
+		RCALL	ZERO
+		RET
+	DIGIT_ONE:
+		RCALL	ONE
+		RET
+	DIGIT_TWO:
+		RCALL	TWO
+		RET
+	DIGIT_THREE:
+		RCALL	THREE
+		RET
+	DIGIT_FOUR:
+		RCALL	FOUR
+		RET
+	DIGIT_FIVE:
+		RCALL	FIVE
+		RET
+	DIGIT_SIX:
+		RCALL	SIX
+		RET
+	DIGIT_SEVEN:
+		RCALL	SEVEN
+		RET
+	DIGIT_EIGHT:
+		RCALL	EIGHT
+		RET
+	DIGIT_NINE:
+		RCALL	NINE
+		RET
+;*********************************************************	
+
+ZERO:
+	SBI PORTD,PORTD4 ;	SET SEGMENT A
+	SBI PORTD,PORTD5 ;	SET SEGMENT B
+	SBI PORTD,PORTD6 ;	SET SEGMENT C
+	SBI PORTD,PORTD7 ;	SET SEGMENT D
+	SBI PORTB,PORTB0 ;	SET SEGMENT E
+	SBI PORTC,PORTC2 ;	SET SEGMENT F
+	RET
+
+ONE:
+	SBI PORTD,PORTD5 ;	SET SEGMENT B
+	SBI PORTD,PORTD6 ;	SET SEGMENT C
+	RET
+
+TWO:
+	SBI PORTD,PORTD4 ;	SET SEGMENT A
+	SBI PORTD,PORTD5 ;	SET SEGMENT B
+	SBI PORTC,PORTC1 ;	SET SEGMENT G
+	SBI PORTB,PORTB0 ;	SET SEGMENT E
+	SBI PORTD,PORTD7 ;	SET SEGMENT D
+	RET
+
+THREE:
+	SBI PORTD,PORTD4 ;	SET SEGMENT A
+	SBI PORTD,PORTD5 ;	SET SEGMENT B
+	SBI PORTD,PORTD6 ;	SET SEGMENT C
+	SBI PORTD,PORTD7 ;	SET SEGMENT D
+	SBI PORTC,PORTC1 ;	SET SEGMENT G
+	RET
+
+FOUR:
+	SBI PORTD,PORTD5 ;	SET SEGMENT B
+	SBI PORTD,PORTD6 ;	SET SEGMENT C
+	SBI PORTC,PORTC2 ;	SET SEGMENT F
+	SBI PORTC,PORTC1 ;	SET SEGMENT G
+	RET
+    
+FIVE:
+	SBI PORTD,PORTD4 ;	SET SEGMENT A
+	SBI PORTD,PORTD6 ;	SET SEGMENT C
+	SBI PORTD,PORTD7 ;	SET SEGMENT D
+	SBI PORTC,PORTC2 ;	SET SEGMENT F
+	SBI PORTC,PORTC1 ;	SET SEGMENT G
+	RET
+
+SIX:
+	SBI PORTD,PORTD4 ;	SET SEGMENT A
+	SBI PORTD,PORTD6 ;	SET SEGMENT C
+	SBI PORTD,PORTD7 ;	SET SEGMENT D
+	SBI PORTB,PORTB0 ;	SET SEGMENT E
+	SBI PORTC,PORTC2 ;	SET SEGMENT F
+	SBI PORTC,PORTC1 ;	SET SEGMENT G
+	RET
+
+SEVEN:
+	SBI PORTD,PORTD4 ;	SET SEGMENT A
+	SBI PORTD,PORTD5 ;	SET SEGMENT B
+	SBI PORTD,PORTD6 ;	SET SEGMENT C
+	RET
+
+EIGHT:
+	SBI PORTD,PORTD4 ;	SET SEGMENT A
+	SBI PORTD,PORTD5 ;	SET SEGMENT B
+	SBI PORTD,PORTD6 ;	SET SEGMENT C
+	SBI PORTD,PORTD7 ;	SET SEGMENT D
+	SBI PORTB,PORTB0 ;	SET SEGMENT E
+	SBI PORTC,PORTC2 ;	SET SEGMENT F
+	SBI PORTC,PORTC1 ;	SET SEGMENT G
+	RET
+
+NINE:
+	SBI PORTD,PORTD4 ;	SET SEGMENT A
+	SBI PORTD,PORTD5 ;	SET SEGMENT B
+	SBI PORTD,PORTD6 ;	SET SEGMENT C
+	SBI PORTD,PORTD7 ;	SET SEGMENT D
+	SBI PORTC,PORTC2 ;	SET SEGMENT F
+	SBI PORTC,PORTC1 ;	SET SEGMENT G
+	RET
+;*********************************************************
+;*********************************************************
+
+
+;*********************************************************
+;*********************************************************
+; DIGIT POOLING DELAY ROUTINE  R10-R11-R12
+;*********************************************************
+;*********************************************************
+DELAY:
+        LDI        R16,0x01
+        MOV        R12,R16
+
+ 
+
+LOOP_3:    LDI        R16,0x05
+        MOV        R11,R16
+
+ 
+
+LOOP_2:    LDI        R16,0xFF
+        MOV        R10,R16
+
+ 
+
+LOOP_1: DEC        R10
+        BRNE    LOOP_1 ; REPEAT UNTIL R10=0
+        DEC        R11
+        BRNE    LOOP_2 ; REPEAT UNTIL  R11=0
+        DEC        R12
+        BRNE    LOOP_3 ; REPEAT UNTIL R12=0
+        RET
+
+
+;*********************************************************
+;*********************************************************
+; EXTRA DELAY ROUTINE  R10-R11-R12
+;*********************************************************
+;*********************************************************
+DELAY_EX:
+        LDI        R16,0x01
+        MOV        R12,R16
+
+ 
+
+LOOP_13:LDI        R16,0x07
+        MOV        R11,R16
+
+ 
+
+LOOP_12:LDI        R16,0x0F
+        MOV        R10,R16
+
+ 
+
+LOOP_11:NOP
+        DEC        R10
+        BRNE    LOOP_11 ; REPEAT UNTIL R10=0
+        DEC        R11
+        BRNE    LOOP_12 ; REPEAT UNTIL  R11=0
+        DEC        R12
+        BRNE    LOOP_13 ; REPEAT UNTIL R12=0
+        RET
+;*********************************************************
+;*********************************************************
+
+
+
+;*********************************************************
+;*********************************************************
+;CONVERSION 2 BYTE HEX TO DEC DIGITS
+;R1= LOW BYTE HEX NUMBER AND R2=HIGH BYTE HEX NUMBER
+;R3-R4 DIVIDER VALUE
+;RESULT DIGITS R5-R6-R7-R8-R9
+;*********************************************************
+;*********************************************************
+CONV_DEC:
+	LDI		R16,	HIGH(10000)	; SET THE DECIMAL DIVIDER TO 10.000 DECIMAL
+	MOV		R4,		R16
+	LDI		R16,	LOW(10000)
+	MOV		R3,		R16
+	RCALL	DEC_DIG				; GET DIGIT BY REPETEAD SUBTRACTION
+	MOV 	R9, 	R16		; SET TEN THOUNSANDS DIGIT
+
+	LDI		R16,	HIGH(1000)	; SET THE DECIMAL DIVIDER TO 1.000 DECIMAL
+	MOV		R4,		R16
+	LDI		R16,	LOW(1000)
+	MOV		R3,		R16
+	RCALL	DEC_DIG				; GET DIGIT BY REPETEAD SUBTRACTION
+	MOV 	R8, 	R16		; SET THOUNSANDS DIGIT
+
+	CLR 	R4 					; SET THE DECIMAL DIVIDER TO 100 DECIMAL
+	LDI 	R16,	100
+	MOV 	R3,		R16
+	RCALL	DEC_DIG				; GET DIGIT BY REPETEAD SUBTRACTION
+	MOV 	R7,	R16			; SET HUNDREDS DIGIT
+
+	LDI		R16,	10 			; SET THE DECIMAL DIVIDER TO 10 DECIMAL
+    MOV		R3,		R16
+	RCALL	DEC_DIG				; GET DIGIT BY REPETEAD SUBTRACTION
+	MOV		R6,	R16			; SET TENS DIGIT
+
+	LDI		R16,	0			
+	ADD		R16,	R1
+	MOV		R5,	R16			; SET ONES DIGIT
+	RET
+
+DEC_DIG:
+	LDI 	R16,	0		; START WITH DECIMAL VALUE 0
+DEC_DIG1:
+	CP		R1,		R3 		; COMPARE WORD WITH DECIMAL DIVIDER VALUE
+	CPC		R2,		R4
+	BRCC	DEC_DIG2		; IF CARRY CLEAR, SUBTRACT DIVIDER VALUE
+	RET 					; DONE SUBTRACTION
+DEC_DIG2:
+	SUB		R1,		R3 		; SUBTRACT DIVIDER VALUE
+	SBC		R2,		R4
+	INC		R16				; UP ONE DIGIT
+	RJMP	DEC_DIG1 		; ONCE AGAIN
+;*********************************************************
+
+
+;*********************************************************
+;*********************************************************
+;COUNT SUBROUTINE
+;*********************************************************
+;*********************************************************
+COUNT:
+	;R18=0x03 R17=0xE8 EQUALS DECIMAL 1.000
+	LDI		R17,0xE7	;COUNT MAX LIMIT LOW BYTE
+	LDI		R18,0x03	;COUNT MAX LIMIT HIGH BYTE
+
+	CP		R14,R17
+	BRCC	L1
+	INC		R14
+	RET
+
+L1:	SUB		R14,R14
+	CP		R15,R18
+	BRCC	L2
+	INC		R15
+	RET
+
+L2:	SUB		R15,R15
+RET
+;*********************************************************
+;*********************************************************
